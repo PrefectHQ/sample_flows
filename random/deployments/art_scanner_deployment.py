@@ -4,10 +4,16 @@ from prefect.flow_runners import SubprocessFlowRunner
 from datetime import timedelta
 
 DeploymentSpec(
-    flow_location="../flows/nike_flow.py",
-    name="Shoe Notification - Daily",
+    flow_location="../flows/art_scanner.py",
+    name="Art Scanner Flow - daily",
     schedule=IntervalSchedule(interval=timedelta(days=1)),
-    tags=["nike"],
+    tags=["art"],
     flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
+)
 
+DeploymentSpec(
+    flow_location="../flows/art_scanner.py",
+    name="Art Scanner Flow",
+    tags=["art"],
+    flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
 )

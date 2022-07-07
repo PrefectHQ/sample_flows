@@ -15,14 +15,14 @@ DeploymentSpec(
     flow_location="../flows/advanced_nike_flow.py",
     name="Advanced Nike Flow - daily",
     schedule=IntervalSchedule(interval=timedelta(days=1)),
-    tags=["demo"],
+    tags=["nike"],
     flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
 )
 
 DeploymentSpec(
     flow_location="../flows/advanced_nike_flow.py",
     name="Advanced Nike Flow",
-    tags=["demo"],
+    tags=["nike"],
     parameters={'url': urls, 'budget': 155},
     flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
 )

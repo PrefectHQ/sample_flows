@@ -10,7 +10,7 @@ DeploymentSpec(
     schedule=IntervalSchedule(interval=timedelta(days=1)),
     flow_runner=SubprocessFlowRunner(condaenv="orion-dev"),
     parameters={'city': 'Seattle' },
-    tags=["demo"]
+    tags=["rainflow"]
 )
 
 DeploymentSpec(
@@ -19,5 +19,5 @@ DeploymentSpec(
     schedule=IntervalSchedule(interval=timedelta(days=1)),
     flow_runner=SubprocessFlowRunner(condaenv="orion-dev"),
     parameters={'city': 'Hogwarts' },
-    tags=["demo"]
+    tags=["rainflow"]
 )
