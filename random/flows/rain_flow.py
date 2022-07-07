@@ -22,7 +22,6 @@ def is_raining_this_week(data):
     ]
     return True if sum([s >= 1 for s in rain]) >= 1 else False
 
-
 @flow(name='Rain Flow')
 def rain_flow(city):
     
