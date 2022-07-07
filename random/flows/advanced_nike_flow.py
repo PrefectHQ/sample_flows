@@ -4,6 +4,14 @@ from typing import List
 import requests
 import re
 
+urls = [
+    "https://www.nike.com/t/air-max-270-womens-shoes-Pgb94t/AH6789-601",
+    "https://www.nike.com/t/air-max-terrascape-90-mens-shoes-R6r8hB/DH2973-100",
+    "https://www.nike.com/t/pegasus-trail-3-gore-tex-mens-running-shoes-HG005k/DR0137-200"
+]
+
+budget = 150
+
 @task(retries=3, retry_delay_seconds=10)
 def find_nike_price(url: str) -> int:
     k = requests.get(url).text
@@ -34,33 +42,5 @@ def parent_flow(urls: List[str], budget: int) -> None:
     for url in urls:
         nike_flow(url, budget)
 
-urls = [
-    "https://www.nike.com/t/air-max-270-womens-shoes-Pgb94t/AH6789-601",
-    "https://www.nike.com/t/air-max-terrascape-90-mens-shoes-R6r8hB/DH2973-100",
-    "https://www.nike.com/t/pegasus-trail-3-gore-tex-mens-running-shoes-HG005k/DR0137-200"
-]
-
-budget = 150
-
-parent_flow(urls, budget)
-
-from prefect.deployments import DeploymentSpec
-from prefect.orion.schemas.schedules import IntervalSchedule
-from prefect.flow_runners import SubprocessFlowRunner
-from datetime import timedelta
-
-DeploymentSpec(
-    flow=parent_flow,
-    name="Advanced Nike Flow - daily",
-    schedule=IntervalSchedule(interval=timedelta(days=1)),
-    tags=["demo"],
-    flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
-)
-
-DeploymentSpec(
-    flow=parent_flow,
-    name="Advanced Nike Flow",
-    tags=["demo"],
-    parameters={'url': urls, 'budget': 155},
-    flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
-)
+if __name__ == "main":
+    parent_flow()

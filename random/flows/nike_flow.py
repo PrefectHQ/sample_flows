@@ -7,6 +7,12 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
+# Make sure you update the slack token 
+slack_token = 'INSERT SLACK TOKEN HERE'
+
+url = "https://www.nike.com/t/air-max-270-womens-shoes-Pgb94t/AH6789-601"
+budget = 120
+    
 @task(retries=3, retry_delay_seconds=10)
 def find_nike_price(url):
     k = requests.get(url).text
@@ -23,7 +29,7 @@ def compare_price(price, budget):
     else:
         return "Don't buy the shoes. They're too expensive"
 
-@flow(name="Shoe Price Notification")
+@flow(name="Nike Flow")
 def nike_flow(url: str, budget: int, slack_token: str):
     price = find_nike_price(url)
     message = compare_price(price, budget)
@@ -32,25 +38,5 @@ def nike_flow(url: str, budget: int, slack_token: str):
         text=f"{message}"
    )
 
-
-url = "https://www.nike.com/t/air-max-270-womens-shoes-Pgb94t/AH6789-601"
-budget = 120
-
-# Make sure you update the slack token 
-slack_token = 'INSERT SLACK TOKEN HERE'
-    
-nike_flow(url, budget, slack_token)
-
-from prefect.deployments import DeploymentSpec
-from prefect.orion.schemas.schedules import IntervalSchedule
-from prefect.flow_runners import SubprocessFlowRunner
-from datetime import timedelta
-
-DeploymentSpec(
-    flow=nike_flow,
-    name="Nike Shoe Flow",
-    schedule=IntervalSchedule(interval=timedelta(days=1)),
-    tags=["demo"],
-    flow_runner=SubprocessFlowRunner(condaenv="orion-dev")
-
-)
+if __name__ == "main":
+    nike_flow()
